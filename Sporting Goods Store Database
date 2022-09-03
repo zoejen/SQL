@@ -33,3 +33,9 @@ SELECT section, SUM(quantity) FROM sporting_goods GROUP BY section;
 
 --what items can be found for under $100?
 SELECT item, price FROM sporting_goods WHERE price <100 ORDER BY price;
+
+$ git rm <file>
+
+$ git commit -m "Deleted the file from the git repository"
+
+$ git push
