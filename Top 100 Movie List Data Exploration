@@ -140,3 +140,10 @@ GROUP BY studio
 HAVING movies_in_list >1
 ORDER BY movies_in_list DESC
 ;
+
+/*Which studios have an average earnings of over 800 mil USD per movie*/
+SELECT Studio, AVG(Worldwide) as avg_earnings
+FROM topmovies
+GROUP BY studio
+HAVING avg_earnings>800.00
+ORDER BY avg_earnings DESC;
