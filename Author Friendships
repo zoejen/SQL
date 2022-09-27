@@ -1,0 +1,66 @@
+/* Which authors were friends with other authors and what were their most famous works? */
+CREATE TABLE authors (id INTEGER PRIMARY KEY AUTOINCREMENT, full_name TEXT, country_of_origin TEXT, birth_year  REAL);
+
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("Harper Lee", "USA", 1926);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("Louisa May Alcott", "USA", 1832);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("JRR Tolkien", "UK", 1892);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("F. Scott Fitzgerald", "USA", 1896);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("CS Lewis", "UK", 1898);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("Ernest Hemingway", "USA", 1899);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("Truman Capote", "USA", 1924);
+INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("Ralph Waldo Emerson", "USA", 1803);
+
+
+CREATE TABLE famous_work (id INTEGER PRIMARY KEY, title TEXT, author_id INTEGER, year REAL);
+INSERT INTO famous_work (title, author_id, year) VALUES ("Self Reliance", 8, 1841); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("The Hobbit", 3, 1937); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("To Kill a Mockingbird", 1, 1960); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("Little Women", 2, 1868); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("In Cold Blood", 7, 1965); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("A Farewell to Arms", 6, 1929); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("The Great Gatsby", 4, 1925); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("The Lion, Witch and the Wardrobe", 5, 1950); 
+INSERT INTO famous_work (title, author_id, year) VALUES ("The Bible", NULL, NULL); 
+
+CREATE TABLE friends (id INTEGER PRIMARY KEY AUTOINCREMENT, friend_1 INTEGER, friend_2 INTEGER);
+
+INSERT INTO friends (friend_1, friend_2) VALUES (1, 7);
+INSERT INTO friends (friend_1, friend_2) VALUES (2, 8);
+INSERT INTO friends (friend_1, friend_2) VALUES (3, 5);
+INSERT INTO friends (friend_1, friend_2) VALUES (4, 6);
+
+SELECT * FROM authors;
+SELECT * FROM famous_work;
+SELECT * FROM friends;
+
+/*Using information from multiple tables, organize the written works according to country*/
+SELECT fw.title, a.country_of_origin FROM famous_work as fw
+JOIN authors as a
+ON fw.author_id = a.id
+ORDER BY country_of_origin;
+
+SELECT COUNT(*)as "how many works", a.country_of_origin FROM famous_work as fw
+JOIN authors as a
+ON fw.author_id = a.id
+GROUP BY country_of_origin;
+
+/*Give the names of the authors who were friends in a table (Use self-join)*/
+SELECT a.full_name as author_friend1, b.full_name as author_friend2 FROM friends
+JOIN authors a
+ON friends.friend_1 = a.id
+JOIN authors b
+ON friends.friend_2 = b.id;
+
+/*Which books are "friends"? :)[using multiple joins] Pair up the famous works of the authors who are friends*/
+SELECT a.title as book_friend1, b.title as book_friend2 FROM friends
+JOIN famous_work a
+ON friends.friend_1 = a.author_id
+JOIN famous_work b
+ON friends.friend_2 = b.author_id
+;
+
+/*List each work with its author*/
+SELECT title, year, full_name 
+FROM famous_work 
+LEFT OUTER JOIN authors 
+ON famous_work.author_id = authors.id;
