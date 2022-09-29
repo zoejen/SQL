@@ -1,4 +1,7 @@
-/* Which authors were friends with other authors and what were their most famous works? */
+/* In this SQL, I created several tables of data about authors, their works, and connections with other authors.  
+I specifically wanted to answer the questions "Which authors were friends with other authors and what were their most famous works?" */
+/*citation https://bookstr.com/article/famous-author-friends/*/
+
 CREATE TABLE authors (id INTEGER PRIMARY KEY AUTOINCREMENT, full_name TEXT, country_of_origin TEXT, birth_year  REAL);
 
 INSERT INTO authors (full_name, country_of_origin, birth_year) VALUES ("Harper Lee", "USA", 1926);
