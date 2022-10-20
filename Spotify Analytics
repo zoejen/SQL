@@ -1,0 +1,81 @@
+/*
+I first downloaded Spotify data (top 50 songs from 2021) from Kaggle.
+Then, I created a table in SQL and inserted the Spotify data into the table.
+Lastly, I explored the data and analyzed it.
+*/
+
+#Creating the table:
+CREATE TABLE BIT_DB0.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+;
+
+#Analyzing the data:
+
+/*What are the three most popular keys for the top 50 songs?*/
+SELECT DISTINCT key, COUNT(key) 
+FROM Spotifydata
+GROUP BY key
+ORDER BY COUNT(key) DESC
+LIMIT 3;
+
+/*Which songs are in 3/4 time signature?*/
+SELECT id, artist_name, track_name, time_signature
+FROM Spotifydata
+WHERE time_signature = 3;
+
+/*What is the average danceability for the 10 most popular songs?*/
+SELECT AVG(popularity)
+FROM (SELECT popularity FROM Spotifydata ORDER BY popularity DESC LIMIT 10);
+
+/*What are the top ten loudest songs*/
+SELECT artist_name, track_name, loudness
+FROM Spotifydata
+ORDER BY loudness DESC
+LIMIT 10;
+
+/*What song has the highest popularity rating?*/
+SELECT artist_name, track_name, popularity 
+FROM Spotifydata
+WHERE popularity in (
+SELECT MAX(popularity)
+FROM Spotifydata
+);
+
+/*Which song(s) feature more than one artist?*/
+SELECT artist_name, track_name
+FROM Spotifydata
+WHERE track_name LIKE '%with%' OR track_name LIKE'%feat%'
+;
+
+/*Which artist has the most songs featured on the list?*/
+SELECT COUNT(artist_name), artist_name FROM Spotifydata
+GROUP BY artist_name
+ORDER BY COUNT(artist_name) desc
+LIMIT 3
+;
+
+/*Which songs have the highest acoustic rating*/
+SELECT MAX(acousticness), track_name, artist_name
+FROM Spotifydata;
+
+/*What artist released the longest song*/
+SELECT MAX(duration_ms), artist_name
+FROM Spotifydata;
